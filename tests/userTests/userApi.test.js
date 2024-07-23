@@ -77,7 +77,7 @@ describe("User Api Test", () => {
       assert.strictEqual(dataDb.length, userList.length + 1);
     });
   });
-  describe("User Tests", async () => {
+  describe("Authorized User Tests", async () => {
     test("get user", async () => {
       const userUrl = baseUrl + userList[0]._id.toString();
       await api.get(userUrl).expect(200);
@@ -116,6 +116,21 @@ describe("User Api Test", () => {
         .set("Authorization", authToken)
         .send(payload)
         .expect(204);
+    });
+    test("update email test", async () => {
+      const updatedEmail = "goblinIsGood@vincenzo.is.good.too";
+      const password = testUser.password;
+      const payload = {
+        updatedEmail,
+        password,
+      };
+      const response = await api
+        .post(updateEmailUrl)
+        .set("Authorization", authToken)
+        .send(payload)
+        .expect(200);
+      const responseUser = response.body.user;
+      assert.strictEqual(responseUser.email, updatedEmail);
     });
   });
 });

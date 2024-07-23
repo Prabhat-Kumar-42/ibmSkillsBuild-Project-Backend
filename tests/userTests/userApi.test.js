@@ -33,6 +33,7 @@ describe("User Api Test", () => {
   let serverConnection;
   let userList = [];
   let userSampleData = [];
+  let testUser;
   let authToken;
 
   before(async () => {
@@ -51,7 +52,8 @@ describe("User Api Test", () => {
       const createdUser = await User.create(user);
       userList.push(createdUser);
     }
-    const res = await api.post(loginUrl).send(userSampleData[0]);
+    testUser = userSampleData[0];
+    const res = await api.post(loginUrl).send(testUser);
     authToken = `${res.body.authorization.scheme} ${res.body.authorization.authToken}`;
   });
 
@@ -62,12 +64,12 @@ describe("User Api Test", () => {
 
   describe("Login and SignUp Tests", async () => {
     test("user login", async () => {
-      const user = userSampleData[0];
+      const user = testUser;
       const response = await api.post(loginUrl).send(user).expect(200);
       assert.ok(response.body.hasOwnProperty("authorization"));
     });
     test("user signup", async () => {
-      const user = { ...userSampleData[0], email: "tempmail.com" };
+      const user = { ...testUser, email: "tempmail.com" };
       await api.post(signupUrl).send(user).expect(201);
       const dataDb = await dataInDB(userModel);
       assert.strictEqual(dataDb.length, userList.length + 1);
@@ -82,8 +84,25 @@ describe("User Api Test", () => {
       await api
         .delete(baseUrl)
         .set("Authorization", authToken)
-        .send(userSampleData[0])
+        .send(testUser)
         .expect(204);
+    });
+    test("update user", async () => {
+      const user = {
+        ...testUser,
+        name: "Orochimaru",
+        dob: "1905-5-23",
+      };
+      const response = await api
+        .put(baseUrl)
+        .set("Authorization", authToken)
+        .send(user)
+        .expect(200);
+      const updatedUser = response.body.user;
+      delete updatedUser.id;
+      delete user.password;
+      user.dob = new Date(user.dob).toJSON();
+      assert.deepStrictEqual(updatedUser, user);
     });
   });
 });

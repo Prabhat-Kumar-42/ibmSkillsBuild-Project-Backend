@@ -1,6 +1,6 @@
-const { User } = require("../models/user.model");
-const throwError = require("../utility/throwError.util");
-const { generateToken } = require("./../utility/authToken.util");
+const { User } = require("../../models/user.model");
+const throwError = require("../../utility/throwError.util");
+const { generateToken } = require("../../utility/authToken.util");
 
 const handleGetUser = async (req, res) => {
   const id = req.params.id;

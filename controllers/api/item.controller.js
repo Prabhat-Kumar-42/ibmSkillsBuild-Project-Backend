@@ -18,6 +18,11 @@ const handleGetCategory = (req, res) => {
   return res.status(200).json(category);
 };
 
+const handleGetAllItems = async (req, res) => {
+  const itemList = await Item.find({});
+  res.status(200).json(itemList);
+};
+
 const handleGetItem = async (req, res) => {
   const id = req.params.id;
   const item = await Item.findById(id);
@@ -76,4 +81,5 @@ module.exports = {
   handleCreateItem,
   handleDeleteItem,
   handleUpdateItem,
+  handleGetAllItems,
 };

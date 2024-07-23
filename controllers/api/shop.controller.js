@@ -34,8 +34,23 @@ const handleCreateShop = async (req, res) => {
   return res.status(201).json({ message: "created" });
 };
 
+const handleDeleteShop = async (req, res) => {
+  const shopId = req.params.shopId;
+  if (!shopId) throwError(400, "Bad Request");
+  const requestingUser = req.user;
+  const shop = await Shop.findById(shopId);
+  if (shop.ownerId.toString() !== requestingUser.id)
+    throwError(403, "Forbidden");
+  const user = await User.findById(requestingUser.id);
+  user.shopId = null;
+  await user.save();
+  await Shop.findByIdAndDelete(shopId);
+  return res.status(204).end();
+};
+
 module.exports = {
   handleGetAllShops,
   handleGetShop,
   handleCreateShop,
+  handleDeleteShop,
 };

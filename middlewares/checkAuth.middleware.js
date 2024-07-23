@@ -1,5 +1,5 @@
 const { verifyToken } = require("../utility/authToken.util");
-const throwError = require("../utility/throwError");
+const throwError = require("../utility/throwError.util");
 
 const checkAuth = (req, res, next) => {
   const authScheme = "Bearer";

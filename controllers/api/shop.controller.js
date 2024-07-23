@@ -71,10 +71,25 @@ const handleUpdateShop = async (req, res) => {
   return res.status(204).json(updatedShop);
 };
 
+const addItemToShopList = async (req, res) => {
+  if (!req.body) throwError(400, "Bad Request");
+  const shopId = req.params.shopId;
+  const requestingUser = req.user;
+  const shop = await Shop.findById(shopId);
+  if (!shop) throwError(400, "Bad Request");
+  if (shop.ownerId.toString() !== requestingUser.id)
+    throwError(403, "Forbidden");
+  const itemList = req.body.itemList;
+  itemList.forEach((item) => shop.itemList.push(item));
+  await shop.save();
+  return res.status(201).json({ message: "created" });
+};
+
 module.exports = {
   handleGetAllShops,
   handleGetShop,
   handleCreateShop,
   handleDeleteShop,
   handleUpdateShop,
+  addItemToShopList,
 };

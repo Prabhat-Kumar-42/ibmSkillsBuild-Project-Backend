@@ -15,6 +15,8 @@ const api = supertest(app);
 const baseUrl = "/api/user/";
 const loginUrl = baseUrl + "login";
 const signupUrl = baseUrl + "signup";
+const updateEmailUrl = baseUrl + "update-email";
+const updatePasswordUrl = baseUrl + "update-password";
 
 const userModel = "User";
 const { User } = require("../../models/user.model");
@@ -103,6 +105,17 @@ describe("User Api Test", () => {
       delete user.password;
       user.dob = new Date(user.dob).toJSON();
       assert.deepStrictEqual(updatedUser, user);
+    });
+    test("update password test", async () => {
+      const payload = {
+        password: testUser.password,
+        updatedPassword: "Goku>VegitaButVegitoBeatsThemAll",
+      };
+      await api
+        .post(updatePasswordUrl)
+        .set("Authorization", authToken)
+        .send(payload)
+        .expect(204);
     });
   });
 });

@@ -3,6 +3,8 @@ const express = require("express");
 require("express-async-errors");
 const cors = require("cors");
 
+const { userRouter } = require("./router/api/user.route");
+const { shopRouter } = require("./router/api/shop.route");
 const app = express();
 
 //Middlewares
@@ -14,10 +16,10 @@ const {
   jwtError,
   errorHandler,
 } = require("./middlewares/errorHandlers.middleware");
-const { userRouter } = require("./router/api/user.route");
 
 //Routes
 app.use("/api/user/", userRouter);
+app.use("/api/shop/", shopRouter);
 
 // Error Handler
 app.use(unknownEndpoint);

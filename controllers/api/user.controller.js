@@ -2,6 +2,13 @@ const { User } = require("../models/user.model");
 const throwError = require("../utility/throwError.util");
 const { generateToken } = require("./../utility/authToken.util");
 
+const handleGetUser = async (req, res) => {
+  const id = req.params.id;
+  const user = await User.findById(id);
+  if (!user) throwError(404, "Not Found");
+  return res.status(200).json(user);
+};
+
 const handleUserSignUp = async (req, res) => {
   if (!req.body)
     throwError(400, "name, email and password are required fields");
@@ -75,6 +82,7 @@ const handleUpdateEmail = async (req, res) => {
 // };
 
 module.exports = {
+  handleGetUser,
   handleUserLogin,
   handleUserSignUp,
   handleDeleteUser,

@@ -13,9 +13,10 @@ const {
 
 userRouter
   .route("/")
-  .get(handleGetUser)
   .delete(checkAuth, handleDeleteUser)
   .put(checkAuth, handleUpdateUser);
+
+userRouter.route("/:id").get(handleGetUser);
 
 userRouter.route("/login").post(handleUserLogin);
 userRouter.route("/signup").post(handleUserSignUp);

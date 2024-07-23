@@ -19,11 +19,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  cart: {
+  cartId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Cart",
   },
-  shop: {
+  shopId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Shop",
   },

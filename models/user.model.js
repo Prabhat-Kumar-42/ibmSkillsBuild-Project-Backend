@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const throwError = require("../utility/throwError");
+const throwError = require("../utility/throwError.util");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -52,9 +52,7 @@ userSchema.statics.matchPassword = async function (email, password) {
     throwError(400, "email and password are required field");
   const user = await this.findOne({ email });
   if (!user) throwError(404, "Not Found");
-  return (await bcrypt.compare(password, user.hashedPassword))
-    ? user
-    : throwError(400, "incorrect email or password");
+  return (await bcrypt.compare(password, user.password)) ? user : null;
 };
 
 const User = mongoose.model("User", userSchema);

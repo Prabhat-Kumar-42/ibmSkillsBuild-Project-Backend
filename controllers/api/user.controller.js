@@ -67,11 +67,12 @@ const handleUpdatePassword = async (req, res) => {
 const handleUpdateEmail = async (req, res) => {
   const { email } = req.user;
   const { updatedEmail, password } = req.body;
+  if (!updatedEmail) throwError("email is required field");
   const user = await User.matchPassword(email, password);
   if (!user) throwError(400, "invalid password");
   user.email = updatedEmail;
   await user.save();
-  return res.status(200).json(user);
+  return res.status(200).json({ message: "updated", user });
 };
 
 // TODO: Below Functionality Works, need to add email verification on singup handler above

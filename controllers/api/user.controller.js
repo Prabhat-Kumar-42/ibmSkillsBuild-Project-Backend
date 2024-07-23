@@ -25,7 +25,7 @@ const handleUserLogin = async (req, res) => {
   const authToken = generateToken(user);
   return res.status(200).json({
     message: "success",
-    authorization: { scheme: "bearer", authToken },
+    authorization: { scheme: "Bearer", authToken },
   });
 };
 

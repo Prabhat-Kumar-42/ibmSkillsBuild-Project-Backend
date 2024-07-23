@@ -12,7 +12,7 @@ const shopSchema = new mongoose.Schema({
   imgUrl: {
     type: String,
   },
-  Category: {
+  category: {
     type: String,
     enum: [
       "Grocery",
@@ -28,7 +28,7 @@ const shopSchema = new mongoose.Schema({
     ],
     required: true,
   },
-  owner: {
+  ownerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,

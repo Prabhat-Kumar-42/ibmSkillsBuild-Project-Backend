@@ -41,12 +41,15 @@ const handleDeleteUser = async (req, res) => {
 const handleUpdateUser = async (req, res) => {
   const id = req.user.id;
   const { name, dob } = req.body;
-  const user = await User.findByIdAndUpdate(
-    id,
-    { name, dob },
-    { new: true, runValidators: true },
-  );
-  return res.status(200).json({ message: "updated", user: user });
+  const updateFields = { name };
+  if (dob) {
+    updateFields.dob = new Date(dob);
+  }
+  const user = await User.findByIdAndUpdate(id, updateFields, {
+    new: true,
+    runValidators: true,
+  });
+  return res.status(200).json({ message: "updated", user });
 };
 
 const handleUpdatePassword = async (req, res) => {

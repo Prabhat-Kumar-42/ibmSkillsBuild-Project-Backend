@@ -49,6 +49,7 @@ const handleUpdateUser = async (req, res) => {
     new: true,
     runValidators: true,
   });
+  if (!user) throwError(404, "Not Found");
   return res.status(200).json({ message: "updated", user });
 };
 

@@ -27,7 +27,7 @@ const handleCreateShop = async (req, res) => {
     location,
     category,
     ownerId,
-    coordinates,
+    geoLocation: { coordinates },
   });
   user.shopId = shop._id;
   await user.save();
@@ -39,6 +39,7 @@ const handleDeleteShop = async (req, res) => {
   if (!shopId) throwError(400, "Bad Request");
   const requestingUser = req.user;
   const shop = await Shop.findById(shopId);
+  if (!shop) throwError(400, "Bad Request");
   if (shop.ownerId.toString() !== requestingUser.id)
     throwError(403, "Forbidden");
   const user = await User.findById(requestingUser.id);
@@ -48,9 +49,32 @@ const handleDeleteShop = async (req, res) => {
   return res.status(204).end();
 };
 
+const handleUpdateShop = async (req, res) => {
+  if (!req.body) throwError(400, "Bad Request");
+  const shopId = req.params.shopId;
+  const requestingUser = req.user;
+  const shop = await Shop.findById(shopId);
+  if (!shop) throwError(400, "Bad Request");
+  if (shop.ownerId.toString() !== requestingUser.id)
+    throwError(403, "Forbidden");
+  const { name, location, category, coordinates } = req.body;
+  const updatedShop = await Shop.findByIdAndUpdate(
+    shopId,
+    {
+      name,
+      location,
+      category,
+      geoLocation: { coordinates },
+    },
+    { runValidators: true, new: true },
+  );
+  return res.status(204).json(updatedShop);
+};
+
 module.exports = {
   handleGetAllShops,
   handleGetShop,
   handleCreateShop,
   handleDeleteShop,
+  handleUpdateShop,
 };

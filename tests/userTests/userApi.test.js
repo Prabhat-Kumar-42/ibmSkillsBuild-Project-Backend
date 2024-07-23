@@ -78,5 +78,12 @@ describe("User Api Test", () => {
       const userUrl = baseUrl + userList[0]._id.toString();
       await api.get(userUrl).expect(200);
     });
+    test("delete user", async () => {
+      await api
+        .delete(baseUrl)
+        .set("Authorization", authToken)
+        .send(userSampleData[0])
+        .expect(204);
+    });
   });
 });

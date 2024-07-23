@@ -1,10 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 require("express-async-errors");
+const cors = require("cors");
+
 const app = express();
 
 //Middlewares
-const cors = require("cors");
+app.use(cors());
 app.use(express.json());
 const {
   unknownEndpoint,

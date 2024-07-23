@@ -55,7 +55,9 @@ const handleUpdateUser = async (req, res) => {
 const handleUpdatePassword = async (req, res) => {
   const { email } = req.user;
   const { password, updatedPassword } = req.body;
-  const user = await User.matchPasswor(email, password);
+  if (!password || !updatedPassword)
+    throwError(400, "both old and updated password are required");
+  const user = await User.matchPassword(email, password);
   if (!user) throwError(400, "invalid password");
   user.password = updatedPassword;
   await user.save();

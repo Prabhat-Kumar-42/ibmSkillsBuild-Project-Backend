@@ -21,7 +21,7 @@ userRouter.route("/:id").get(handleGetUser);
 userRouter.route("/login").post(handleUserLogin);
 userRouter.route("/signup").post(handleUserSignUp);
 
-userRouter.route("/update-email").post(checkAuth, handleUpdateEmail);
-userRouter.route("/update-password").post(checkAuth, handleUpdatePassword);
+userRouter.route("/update-email").put(checkAuth, handleUpdateEmail);
+userRouter.route("/update-password").put(checkAuth, handleUpdatePassword);
 
 module.exports = { userRouter };

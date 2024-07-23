@@ -112,7 +112,7 @@ describe("User Api Test", () => {
         updatedPassword: "Goku>VegitaButVegitoBeatsThemAll",
       };
       await api
-        .post(updatePasswordUrl)
+        .put(updatePasswordUrl)
         .set("Authorization", authToken)
         .send(payload)
         .expect(204);
@@ -125,7 +125,7 @@ describe("User Api Test", () => {
         password,
       };
       const response = await api
-        .post(updateEmailUrl)
+        .put(updateEmailUrl)
         .set("Authorization", authToken)
         .send(payload)
         .expect(200);
@@ -150,7 +150,7 @@ describe("User Api Test", () => {
         password: testUser.password,
         updatedPassword: "Goku>VegitaButVegitoBeatsThemAll",
       };
-      await api.post(updatePasswordUrl).send(payload).expect(400);
+      await api.put(updatePasswordUrl).send(payload).expect(400);
     });
     test("update email test fails with status 400", async () => {
       const updatedEmail = "goblinIsGood@vincenzo.is.good.too";
@@ -159,7 +159,7 @@ describe("User Api Test", () => {
         updatedEmail,
         password,
       };
-      await api.post(updateEmailUrl).send(payload).expect(400);
+      await api.put(updateEmailUrl).send(payload).expect(400);
     });
   });
 });

@@ -5,6 +5,7 @@ const app = express();
 
 //Middlewares
 const cors = require("cors");
+app.use(express.json());
 const {
   unknownEndpoint,
   mongoError,

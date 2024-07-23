@@ -1,4 +1,4 @@
-const throwError = require("../utils/throwError");
+const throwError = require("../utility/throwError.util.js");
 
 const unknownEndpoint = (req, res) => {
   throwError(404, "unknown endpoint");

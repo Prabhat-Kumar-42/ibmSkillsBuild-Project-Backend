@@ -1,5 +1,5 @@
 const { app } = require("./app");
-const { info } = require("./utility/logger.utility");
+const { info } = require("./utility/logger.util");
 const PORT = process.env.PORT || 3001;
 
 const startServer = () => {

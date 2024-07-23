@@ -22,7 +22,10 @@ const {
   setUpTestServer,
   tearDownTestServer,
 } = require("../../utility/mongoMemoryServer");
-const { getMockDataList } = require("../testUtilities/db.testUtility");
+const {
+  getMockDataList,
+  dataInDB,
+} = require("../testUtilities/db.testUtility");
 const userMockData = getMockDataList(userModel);
 
 describe("User Api Test", () => {
@@ -48,7 +51,7 @@ describe("User Api Test", () => {
       const createdUser = await User.create(user);
       userList.push(createdUser);
     }
-    const res = api.post(loginUrl).post(userSampleData[0]);
+    const res = await api.post(loginUrl).send(userSampleData[0]);
     authToken = `${res.body.authorization.scheme} ${res.body.authorization.authToken}`;
   });
 
@@ -66,6 +69,14 @@ describe("User Api Test", () => {
     test("user signup", async () => {
       const user = { ...userSampleData[0], email: "tempmail.com" };
       await api.post(signupUrl).send(user).expect(201);
+      const dataDb = await dataInDB(userModel);
+      assert.strictEqual(dataDb.length, userList.length + 1);
+    });
+  });
+  describe("User Tests", async () => {
+    test("get user", async () => {
+      const userUrl = baseUrl + userList[0]._id.toString();
+      await api.get(userUrl).expect(200);
     });
   });
 });

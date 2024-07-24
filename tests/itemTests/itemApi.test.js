@@ -22,6 +22,8 @@ const {
   dataInDB,
 } = require("../testUtilities/db.testUtility");
 const { userSampleData } = require("../testUtilities/mockData/userSampleData");
+const { itemSampleData } = require("../testUtilities/mockData/itemSampleData");
+const { Item } = require("../../models/item.model");
 
 const itemModel = "Item";
 const shopModel = "Shop";
@@ -44,18 +46,19 @@ const setUpTestUser = async (userData) => {
   return { user, userAuthToken };
 };
 
-const setUpShop = async (shopData, authToken) => {
+const setUpShop = async (shopData, userAuthToken) => {
   shopData.coordinates = _.cloneDeep(shopData.geoLocation.coordinates);
   delete shopData.geoLocation;
 
   const createShopResponse = await api
     .post(shopBaseUrl)
-    .set("authorization", authToken)
+    .set("authorization", userAuthToken)
     .send(shopData)
     .expect(201);
   const authorization = createShopResponse.body.authorization;
-  const newToken = `${authorization.scheme} ${authorization.authToken}`;
-  return newToken;
+  const shop = createShopResponse.body.shop;
+  const authToken = `${authorization.scheme} ${authorization.authToken}`;
+  return { shop, authToken };
 };
 
 describe("Item Api Test", async () => {
@@ -64,6 +67,8 @@ describe("Item Api Test", async () => {
   let itemList = [];
   let testUser;
   let testUserAuthToken;
+  let itemSampleData = [];
+  let testShop;
 
   before(async () => {
     const serverInfo = await setUpTestServer();
@@ -72,9 +77,30 @@ describe("Item Api Test", async () => {
     const testUserInfo = await setUpTestUser(userSampleData[0]);
     testUser = testUserInfo.user;
     testUserAuthToken = testUserInfo.userAuthToken;
-    testUserAuthToken = await setUpShop(shopMockData[0], testUserAuthToken);
+    const testShopInfo = await setUpShop(shopMockData[0], testUserAuthToken);
+    testShop = testShopInfo.shop;
+    testUserAuthToken = testShopInfo.authToken;
   });
   after(async () => {
     await tearDownTestServer(mongoServer, serverConnection);
+  });
+  beforeEach(async () => {
+    itemSampleData = _.cloneDeep(itemMockData);
+    for (let item of itemSampleData) {
+      item.shopId = testShop.id;
+      const createdItem = await Item.create(item);
+      itemList.push(createdItem);
+    }
+  });
+  afterEach(async () => {
+    await Item.deleteMany({});
+    itemList = [];
+  });
+
+  describe("Public Api Tests", async () => {
+    test("get all items", async () => {
+      const response = await api.get(itemBaseUrl).expect(200);
+      assert.strictEqual(response.body.length, itemList.length);
+    });
   });
 });

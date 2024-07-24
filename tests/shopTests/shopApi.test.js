@@ -144,21 +144,21 @@ describe("Shop Api Test", async () => {
       });
     });
     describe("Unauthenticated Access Tests", async () => {
-      test("create shop test will fail with status code 400", async () => {
+      test("create shop test will fail with status code 401", async () => {
         testShopData.coordinates = _.cloneDeep(
           testShopData.geoLocation.coordinates,
         );
         delete testShopData.geoLocation;
-        await api.post(baseUrl).send(testShopData).expect(400);
+        await api.post(baseUrl).send(testShopData).expect(401);
       });
-      test("update shop test will fail with status code 400", async () => {
+      test("update shop test will fail with status code 401", async () => {
         const testShopUrl = baseUrl + testShop.id;
         const payload = { ...testShopData, name: "bestShopInTheWorld" };
-        await api.put(testShopUrl).send(payload).expect(400);
+        await api.put(testShopUrl).send(payload).expect(401);
       });
-      test("delete shop test will fail with status code 400", async () => {
+      test("delete shop test will fail with status code 401", async () => {
         const testShopUrl = baseUrl + testShop.id;
-        await api.delete(testShopUrl).expect(400);
+        await api.delete(testShopUrl).expect(401);
       });
     });
     describe("Unauthorized Access Tests", async () => {

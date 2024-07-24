@@ -133,33 +133,33 @@ describe("User Api Test", () => {
       assert.strictEqual(responseUser.email, updatedEmail);
     });
   });
-  describe("Unauthorized User Tests", async () => {
-    test("delete user fails with status 400", async () => {
-      await api.delete(baseUrl).send(testUser).expect(400);
+  describe("Unauthenticated User Tests", async () => {
+    test("delete user fails with status 401", async () => {
+      await api.delete(baseUrl).send(testUser).expect(401);
     });
-    test("update user fails with status 400", async () => {
+    test("update user fails with status 401", async () => {
       const user = {
         ...testUser,
         name: "Orochimaru",
         dob: "1905-5-23",
       };
-      await api.put(baseUrl).send(user).expect(400);
+      await api.put(baseUrl).send(user).expect(401);
     });
-    test("update password test fails with status 400", async () => {
+    test("update password test fails with status 401", async () => {
       const payload = {
         password: testUser.password,
         updatedPassword: "Goku>VegitaButVegitoBeatsThemAll",
       };
-      await api.put(updatePasswordUrl).send(payload).expect(400);
+      await api.put(updatePasswordUrl).send(payload).expect(401);
     });
-    test("update email test fails with status 400", async () => {
+    test("update email test fails with status 401", async () => {
       const updatedEmail = "goblinIsGood@vincenzo.is.good.too";
       const password = testUser.password;
       const payload = {
         updatedEmail,
         password,
       };
-      await api.put(updateEmailUrl).send(payload).expect(400);
+      await api.put(updateEmailUrl).send(payload).expect(401);
     });
   });
 });

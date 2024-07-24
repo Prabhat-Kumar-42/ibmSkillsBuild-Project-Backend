@@ -93,7 +93,7 @@ describe("Shop Api Test", async () => {
   });
   describe("Authorized Routes Tests", async () => {
     describe("Authorized Access Tests", async () => {
-      test("Create Shop Test", async () => {
+      test("create shop test", async () => {
         testShopData.coordinates = _.cloneDeep(
           testShopData.geoLocation.coordinates,
         );
@@ -106,7 +106,7 @@ describe("Shop Api Test", async () => {
         const shopDb = await dataInDB(shopModel);
         assert.strictEqual(shopDb.length, shopList.length + 1);
       });
-      test("Update Shop Test", async () => {
+      test("update shop test", async () => {
         const testShopUrl = baseUrl + testShop.id;
         const payload = { ...testShopData, name: "bestShopInTheWorld" };
         const response = await api
@@ -117,7 +117,7 @@ describe("Shop Api Test", async () => {
         const updatedShop = response.body;
         assert.strictEqual(payload.name, updatedShop.name);
       });
-      test("Delete Shop Test", async () => {
+      test("delete shop test", async () => {
         const testShopUrl = baseUrl + testShop.id;
         await api
           .delete(testShopUrl)
@@ -125,6 +125,24 @@ describe("Shop Api Test", async () => {
           .expect(204);
         const shopDb = await dataInDB(shopModel);
         assert.strictEqual(shopDb.length, shopList.length - 1);
+      });
+    });
+    describe("Unauthenticated Access Tests", async () => {
+      test("create shop test will fail with status code 400", async () => {
+        testShopData.coordinates = _.cloneDeep(
+          testShopData.geoLocation.coordinates,
+        );
+        delete testShopData.geoLocation;
+        await api.post(baseUrl).send(testShopData).expect(400);
+      });
+      test("update shop test will fail with status code 400", async () => {
+        const testShopUrl = baseUrl + testShop.id;
+        const payload = { ...testShopData, name: "bestShopInTheWorld" };
+        await api.put(testShopUrl).send(payload).expect(400);
+      });
+      test("delete shop test will fail with status code 400", async () => {
+        const testShopUrl = baseUrl + testShop.id;
+        await api.delete(testShopUrl).expect(400);
       });
     });
   });

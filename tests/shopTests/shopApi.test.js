@@ -17,7 +17,10 @@ const {
 
 const _ = require("lodash");
 
-const { getMockDataList } = require("../testUtilities/db.testUtility");
+const {
+  getMockDataList,
+  dataInDB,
+} = require("../testUtilities/db.testUtility");
 const { Shop } = require("../../models/shop.model");
 const shopModel = "Shop";
 const userModel = "User";
@@ -111,6 +114,15 @@ describe("Shop Api Test", async () => {
           .expect(200);
         const updatedShop = response.body;
         assert.strictEqual(payload.name, updatedShop.name);
+      });
+      test("Delete Shop Test", async () => {
+        const testShopUrl = baseUrl + testShop.id;
+        await api
+          .delete(testShopUrl)
+          .set("Authorization", testUserAuthToken)
+          .expect(204);
+        const shopDb = await dataInDB(shopModel);
+        assert.strictEqual(shopDb.length, shopList.length - 1);
       });
     });
   });

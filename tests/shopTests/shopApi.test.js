@@ -37,6 +37,7 @@ describe("Shop Api Test", async () => {
   let testUserData;
   let testUser;
   let testUserAuthToken;
+  let testShopData;
   let testShop;
   before(async () => {
     userSampleData = _.cloneDeep(userMockData);
@@ -67,21 +68,39 @@ describe("Shop Api Test", async () => {
       shopList.push(createdShop);
     }
     testShop = shopList[0];
+    testShopData = _.cloneDeep(sampleShopData[0]);
   });
   afterEach(async () => {
     await Shop.deleteMany({});
     shopList = [];
   });
-  describe("Getting Shop Data Tests", () => {
-    test("fetch all shop data", async () => {
-      const response = await api.get(baseUrl).expect(200);
-      assert.strictEqual(response.body.length, shopList.length);
+  describe("Public Routes Test", async () => {
+    describe("Getting Shop Data Tests", () => {
+      test("fetch all shop data", async () => {
+        const response = await api.get(baseUrl).expect(200);
+        assert.strictEqual(response.body.length, shopList.length);
+      });
+      test("fetch single shop data", async () => {
+        const testShopUrl = baseUrl + testShop.id;
+        const response = await api.get(testShopUrl).expect(200);
+        const responseShop = response.body;
+        assert.strictEqual(testShop._id.toString(), responseShop.id);
+      });
     });
-    test("fetch single shop data", async () => {
-      const testShopUrl = baseUrl + testShop.id;
-      const response = await api.get(testShopUrl).expect(200);
-      const responseShop = response.body;
-      assert.strictEqual(testShop._id.toString(), responseShop.id);
+  });
+  describe("Authorized Routes Tests", async () => {
+    describe("Authorized Access Tests", async () => {
+      test("Create Shop Test", async () => {
+        testShopData.coordinates = _.cloneDeep(
+          testShopData.geoLocation.coordinates,
+        );
+        delete testShopData.geoLocation;
+        await api
+          .post(baseUrl)
+          .set("Authorization", testUserAuthToken)
+          .send(testShopData)
+          .expect(201);
+      });
     });
   });
 });

@@ -2,6 +2,8 @@ const { Shop } = require("../../models/shop.model");
 const { User } = require("../../models/user.model");
 const throwError = require("../../utility/throwError.util");
 
+// TODO: add a handler to get the enum values of shop category;
+//
 const handleGetAllShops = async (req, res) => {
   const shopsList = await Shop.find({});
   return res.status(200).json(shopsList);
@@ -21,7 +23,10 @@ const handleCreateShop = async (req, res) => {
   if (!user) throwError(404, "Not Found");
   const { name, location, category, coordinates } = req.body;
   if (!name || !location || !category || !coordinates)
-    throwError(400, "all marked fields are required");
+    throwError(
+      400,
+      "[name, location, category, coordinates] are required fields",
+    );
   const shop = await Shop.create({
     name,
     location,

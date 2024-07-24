@@ -4,70 +4,48 @@
 
 #### `/api/user`
 
-- **DELETE**
+### 1. Get User Details
 
-  - Description: Deletes the requesting user.
-  - Success Status: `204 No Content`
-  - Failure Codes: `400 Bad Request`, `404 Not Found`, `500 Internal Server Error`
-  - Response Body:
-    - Error Message: Details about the error encountered.
+**Endpoint:** `GET /api/user/:id`
 
-- **PUT**
-  - Description: Updates the requesting user.
-  - Success Status: `200 OK` (default unless specified otherwise)
-  - Failure Codes: `400 Bad Request`, `404 Not Found`, `500 Internal Server Error`
-  - Response Body:
-    - Success Message: updated.
-    - Error Message: Details about the error encountered.
+**Description:** Retrieves user details by user ID.
 
-#### `/api/user/:id`
+**Request Parameters:**
+- `id` (Path Parameter): The ID of the user to retrieve.
 
-- **GET**
-  - Description: Fetches the data of the user with the specified ID.
-  - Success Status: `200 OK`
-  - Failure Codes: `404 Not Found`, `500 Internal Server Error`
-  - Response Body:
-    - User data if found.
-    - Error Message if user with the given ID does not exist.
+**Response:**
+- Status Code: `200 OK`
+- Body: JSON object containing user details.
+- Error Responses: 
+  - `404 Not Found`: If the user does not exist.
 
-#### `/api/user/login`
+### 2. User Sign Up
+**Endpoint:** `POST /api/user/signup`
 
-- **POST**
-  - Description: Login endpoint; returns Bearer token on successful login.
-  - Success Status: `200 OK`
-  - Failure Codes: `400 Bad Request`, `404 Not Found`, `500 Internal Server Error`
-  - Response Body:
-    - On successful login:
-      - Success Message: success
-      - Bearer token
-      - User Data
-    - Error Message if login fails.
+**Description:** Creates a new user account.
 
-#### `/api/user/signup`
+**Request Body:**
+- `name` (String): The name of the user.
+- `email` (String): The email of the user.
+- `password` (String): The password for the user account.
 
-- **POST**
-  - Description: Signup endpoint; allows users to sign up.
-  - Success Status: `201 Created`
-  - Failure Codes: `400 Bad Request`, `500 Internal Server Error`
-  - Response Body:
-    - Success Message: created.
-    - Error Message: Details about signup failure.
+**Response:**
+- Status Code: `201 Created`
+- Body: JSON object with a message indicating successful creation.
+- Error Responses:
+  - `400 Bad Request`: If name, email, or password are missing.
 
-#### `/api/user/update-email`
+### 3. User Login
+**Endpoint:** `POST /api/user/login`
 
-- **PUT**
-  - Description: Endpoint to update the requesting user's email.
-  - Success Status: `200 OK`
-  - Failure Codes: `400 Bad Request`, `404 Not Found`, `500 Internal Server Error`
-  - Response Body:
-    - Success Message: updated.
-    - Error Message: Details about the error encountered.
+**Description:** Authenticates a user and returns an authorization token.
 
-#### `/api/user/update-password`
+**Request Body:**
+- `email` (String): The email of the user.
+- `password` (String): The password of the user.
 
-- **PUT**
-  - Description: Endpoint for the user to update their password.
-  - Success Status: `204 No Content`
-  - Failure Codes: `400 Bad Request`, `404 Not Found`, `500 Internal Server Error`
-  - Response Body:
-    - Error Message: Details about the error encountered.
+**Response:**
+- Status Code: `200 OK`
+- Body: JSON object containing a success message, authorization token, and user details.
+- Error Responses:
+  - `400 Bad Request`: If email or password are missing or incorrect.

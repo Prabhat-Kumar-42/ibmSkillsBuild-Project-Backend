@@ -42,6 +42,7 @@
     - On successful login:
       - Success Message: success
       - Bearer token
+      - User Data
     - Error Message if login fails.
 
 #### `/api/user/signup`

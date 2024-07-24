@@ -45,7 +45,7 @@ const handleCreateItem = async (req, res) => {
   });
   shop.itemList.push(item._id);
   await shop.save();
-  return res.status(201).json({ message: "created" });
+  return res.status(201).json({ message: "created", item });
 };
 
 const handleDeleteItem = async (req, res) => {
@@ -54,25 +54,31 @@ const handleDeleteItem = async (req, res) => {
   const shopId = req.user.shopId;
   const shop = await Shop.findById(shopId);
   if (!shop) throwError(404, "shop not found");
+  const item = await Item.findById(itemId);
+  if (item.shopId.toString() !== shopId) throwError(403, "Forbidden");
   shop.itemList = shop.itemList.filter(
     (item) => item._id.toString() !== itemId,
   );
   await shop.save();
-  await Item.findByIdAndDelete(itemId);
+  await item.deleteOne();
   return res.status(204).end();
 };
 
 const handleUpdateItem = async (req, res) => {
   const itemId = req.params.itemId;
   if (!itemId || !req.body) throwError(400, "Bad Request");
-  const { name, category, price, discount, quantity } = req.body;
-  const item = await Item.findByIdAndUpdate(
-    itemId,
-    { name, category, price, discount, quantity },
-    { runValidators: true, new: true },
-  );
+  const shopId = req.user.shopId;
+  const item = await Item.findById(itemId);
   if (!item) throwError(404, "Not Found");
-  return res.status(200).end();
+  if (item.shopId.toString() !== shopId) throwError(403, "Forbidden");
+  const { name, category, price, discount, quantity } = req.body;
+  if (name) item.name = name;
+  if (category) item.category = category;
+  if (price) item.price = price;
+  if (discount) item.discount = discount;
+  if (quantity) item.quantity = quantity;
+  await item.save();
+  return res.status(200).json({ message: "updated", item });
 };
 
 module.exports = {

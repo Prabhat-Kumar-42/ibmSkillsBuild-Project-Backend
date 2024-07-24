@@ -5,6 +5,7 @@ const throwError = require("../../utility/throwError.util");
 
 // TODO: 1. add a handler to get the enum values of shop category;
 // TODO: 2. send auth as headers
+// TODO: 3. added shop object in createObject handler, add this in documentation
 const handleGetAllShops = async (req, res) => {
   const shopsList = await Shop.find({});
   return res.status(200).json(shopsList);
@@ -41,6 +42,7 @@ const handleCreateShop = async (req, res) => {
   return res.status(201).json({
     message: "created",
     authorization: { scheme: "Bearer", authToken },
+    shop,
   });
 };
 

@@ -15,11 +15,13 @@ const {
 itemRouter
   .route("/")
   .get(handleGetAllItems)
-  .post(checkAuth, checkShop, handleCreateItem)
-  .put(checkAuth, checkShop, handleUpdateItem)
-  .delete(checkAuth, checkShop, handleDeleteItem);
+  .post(checkAuth, checkShop, handleCreateItem);
 
-itemRouter.route("/:itemId").get(handleGetItem);
+itemRouter
+  .route("/:itemId")
+  .get(handleGetItem)
+  .delete(checkAuth, checkShop, handleDeleteItem)
+  .put(checkAuth, checkShop, handleUpdateItem);
 
 itemRouter.route("/categories").get(handleGetCategory);
 

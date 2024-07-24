@@ -145,6 +145,7 @@ describe("Shop Api Test", async () => {
     });
     describe("Unauthenticated Access Tests", async () => {
       test("create shop test will fail with status code 401", async () => {
+
         testShopData.coordinates = _.cloneDeep(
           testShopData.geoLocation.coordinates,
         );
@@ -159,6 +160,7 @@ describe("Shop Api Test", async () => {
       test("delete shop test will fail with status code 401", async () => {
         const testShopUrl = baseUrl + testShop.id;
         await api.delete(testShopUrl).expect(401);
+
       });
     });
     describe("Unauthorized Access Tests", async () => {

@@ -13,6 +13,7 @@ const getMockDataList = (modelName) => {
       return shopSampleData;
     case "Item":
       return itemSampleData;
+
   }
 };
 
@@ -24,6 +25,7 @@ const getModel = (modelName) => {
       return Shop;
     case "Item":
       return Item;
+
   }
 };
 

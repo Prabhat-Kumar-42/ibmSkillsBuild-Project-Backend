@@ -18,6 +18,7 @@
 - Error Responses: 
   - `404 Not Found`: If the user does not exist.
 
+
 ### 2. User Sign Up
 **Endpoint:** `POST /api/user/signup`
 
@@ -34,6 +35,7 @@
 - Error Responses:
   - `400 Bad Request`: If `name`, `email`, or `password` are missing.
 
+
 ### 3. User Login
 **Endpoint:** `POST /api/user/login`
 
@@ -48,6 +50,7 @@
 - Body: JSON object containing a success message, authorization token, and user details.
 - Error Responses:
   - `400 Bad Request`: If `email` or `password` are missing or incorrect.
+
 
 ### 4. Delete User
 **Endpoint:** `DELETE /api/user`
@@ -65,6 +68,7 @@
   - `400 Bad Request`: If `password` is incorrect.
   - `404 Not Found`: If the user does not exist.
 
+
 ### 5. Update User Details
 **Endpoint:** `PUT /api/user`
 
@@ -80,6 +84,7 @@
 - Error Responses:
   - `400 Bad Request`: If `name` is missing.
   - `404 Not Found`: If the user does not exist.
+
  
 ### 6. Update Password
 **Endpoint:** `PUT /api/user/password`
@@ -94,6 +99,7 @@
 - Status Code: `204 No Content`
 - Error Responses:
   - `400 Bad Request`: If `password` or `updatedPassword` are missing or incorrect.
+
 
 ### 7. Update Email
 **Endpoint:** `PUT /api/user/email`

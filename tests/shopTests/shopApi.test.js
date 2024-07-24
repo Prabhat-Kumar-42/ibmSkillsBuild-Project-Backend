@@ -6,7 +6,7 @@ const {
   afterEach,
   test,
 } = require("node:test");
-
+const assert = require("assert");
 const supertest = require("supertest");
 const { app } = require("../../app");
 const api = supertest(app);
@@ -34,17 +34,25 @@ describe("Shop Api Test", async () => {
   let shopList = [];
   let sampleShopData = [];
   let userSampleData = [];
+  let testUserData;
   let testUser;
   let testUserAuthToken;
   before(async () => {
     userSampleData = _.cloneDeep(userMockData);
-    testUser = userSampleData[0];
+    testUserData = userSampleData[0];
     const serverInfo = await setUpTestServer();
     mongoServer = serverInfo.mongoServer;
     serverConnection = serverInfo.serverConnection;
-    const singUpResponse = await api.post(signupUrl).send(testUser);
-    const loginResponse = await api.post(loginUrl).send(testUser);
+    const singUpResponse = await api
+      .post(signupUrl)
+      .send(testUserData)
+      .expect(201);
+    const loginResponse = await api
+      .post(loginUrl)
+      .send(testUserData)
+      .expect(200);
     const authResponse = loginResponse.body.authorization;
+    testUser = loginResponse.body.user;
     testUserAuthToken = `${authResponse.scheme} ${authResponse.authToken}`;
   });
   after(async () => {
@@ -53,6 +61,7 @@ describe("Shop Api Test", async () => {
   beforeEach(async () => {
     sampleShopData = _.cloneDeep(shopMockData);
     for (let shop of sampleShopData) {
+      shop.ownerId = testUser.id;
       const createdShop = await Shop.create(shop);
       shopList.push(createdShop);
     }
@@ -60,5 +69,11 @@ describe("Shop Api Test", async () => {
   afterEach(async () => {
     await Shop.deleteMany({});
     shopList = [];
+  });
+  describe("Getting Shop Data Tests", () => {
+    test("fetch all shop data", async () => {
+      const response = await api.get(baseUrl).expect(200);
+      assert.strictEqual(response.body.length, shopList.length);
+    });
   });
 });

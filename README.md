@@ -2,6 +2,7 @@
 
 [User Controller](./documentations/api/userController.md)
 [Shop Controller](./documentations/api/shopController.md)
+[Item Controller](./documentations/api/itemController.md)
 
 ## TODOs
 
@@ -16,7 +17,7 @@
 
 ### Item API
 
-- To be defined.
+- populate shop data on reterival.
 
 ### Cart API
 

@@ -32,6 +32,7 @@
 - Error Responses:
   - `401 Unauthorized`: If the user is not authenticated.
 
+
 ### 3. Get Shop Details
 **Endpoint:** `GET /api/shop/:shopId`
 
@@ -45,6 +46,7 @@
 - Body: JSON object containing details of the shop.
 - Error Responses:
   - `404 Not Found`: If the shop does not exist.
+
 
 ### 4. Update Shop
 **Endpoint:** `PUT /api/shop/:shopId`
@@ -68,6 +70,7 @@ Request Headers:
 - Error Responses:
   - `401 Unauthorized`: If the user is not authenticated.
   - `404 Not Found`: If the shop does not exist.
+
 
 ### 5. Delete Shop
 **Endpoint:** `DELETE /api/shop/:shopId`

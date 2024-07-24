@@ -5,6 +5,8 @@ const cors = require("cors");
 
 const { userRouter } = require("./router/api/user.route");
 const { shopRouter } = require("./router/api/shop.route");
+const { itemRouter } = require("./router/api/item.route");
+
 const app = express();
 
 //Middlewares
@@ -20,6 +22,7 @@ const {
 //Routes
 app.use("/api/user/", userRouter);
 app.use("/api/shop/", shopRouter);
+app.use("/api/item/", itemRouter);
 
 // Error Handler
 app.use(unknownEndpoint);

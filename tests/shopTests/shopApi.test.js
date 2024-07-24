@@ -101,6 +101,17 @@ describe("Shop Api Test", async () => {
           .send(testShopData)
           .expect(201);
       });
+      test("Update Shop Test", async () => {
+        const testShopUrl = baseUrl + testShop.id;
+        const payload = { ...testShopData, name: "bestShopInTheWorld" };
+        const response = await api
+          .put(testShopUrl)
+          .set("Authorization", testUserAuthToken)
+          .send(payload)
+          .expect(200);
+        const updatedShop = response.body;
+        assert.strictEqual(payload.name, updatedShop.name);
+      });
     });
   });
 });

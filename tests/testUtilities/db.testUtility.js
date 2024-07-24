@@ -1,5 +1,7 @@
+const { Item } = require("../../models/item.model");
 const { Shop } = require("../../models/shop.model");
 const { User } = require("../../models/user.model");
+const { itemSampleData } = require("./mockData/itemSampleData");
 const { shopSampleData } = require("./mockData/shopSampleData");
 const { userSampleData } = require("./mockData/userSampleData");
 
@@ -9,6 +11,8 @@ const getMockDataList = (modelName) => {
       return userSampleData;
     case "Shop":
       return shopSampleData;
+    case "Item":
+      return itemSampleData;
   }
 };
 
@@ -18,6 +22,8 @@ const getModel = (modelName) => {
       return User;
     case "Shop":
       return Shop;
+    case "Item":
+      return Item;
   }
 };
 

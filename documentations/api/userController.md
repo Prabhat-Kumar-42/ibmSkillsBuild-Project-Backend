@@ -1,9 +1,5 @@
 ## User Controller
 
-### Endpoints
-
-#### `/api/user`
-
 ### 1. Get User Details
 **Endpoint:** `GET /api/user/:id`
 

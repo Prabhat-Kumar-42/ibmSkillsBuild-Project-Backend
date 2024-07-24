@@ -103,6 +103,8 @@ describe("Shop Api Test", async () => {
           .set("Authorization", testUserAuthToken)
           .send(testShopData)
           .expect(201);
+        const shopDb = await dataInDB(shopModel);
+        assert.strictEqual(shopDb.length, shopList.length + 1);
       });
       test("Update Shop Test", async () => {
         const testShopUrl = baseUrl + testShop.id;

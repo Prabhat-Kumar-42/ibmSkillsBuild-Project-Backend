@@ -5,10 +5,10 @@ const checkAuth = (req, res, next) => {
   const authScheme = "Bearer";
   const authorization = req.get("Authorization");
   if (!authorization) {
-    return throwError(400, "login required");
+    return throwError(401, "login required");
   }
   if (!authorization.startsWith(authScheme)) {
-    return throwError(400, "invalid auth scheme");
+    return throwError(401, "invalid auth scheme");
   }
   const token = authorization.slice(authScheme.length + 1);
   const user = verifyToken(token);

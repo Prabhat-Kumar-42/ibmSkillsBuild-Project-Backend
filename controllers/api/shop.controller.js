@@ -1,6 +1,11 @@
 const { Shop } = require("../../models/shop.model");
 const { User } = require("../../models/user.model");
+const { generateToken } = require("../../utility/authToken.util");
 const throwError = require("../../utility/throwError.util");
+
+// TODO: 1. add a handler to get the enum values of shop category;
+// TODO: 2. send auth as headers
+// TODO: 3. added shop object in createObject handler, add this in documentation
 
 const handleGetAllShops = async (req, res) => {
   const shopsList = await Shop.find({});
@@ -21,7 +26,10 @@ const handleCreateShop = async (req, res) => {
   if (!user) throwError(404, "Not Found");
   const { name, location, category, coordinates } = req.body;
   if (!name || !location || !category || !coordinates)
-    throwError(400, "all marked fields are required");
+    throwError(
+      400,
+      "[name, location, category, coordinates] are required fields",
+    );
   const shop = await Shop.create({
     name,
     location,
@@ -31,7 +39,12 @@ const handleCreateShop = async (req, res) => {
   });
   user.shopId = shop._id;
   await user.save();
-  return res.status(201).json({ message: "created" });
+  const authToken = generateToken(user);
+  return res.status(201).json({
+    message: "created",
+    authorization: { scheme: "Bearer", authToken },
+    shop,
+  });
 };
 
 const handleDeleteShop = async (req, res) => {
@@ -70,6 +83,7 @@ const handleUpdateShop = async (req, res) => {
     runValidators: true,
     new: true,
   });
+  if (!updatedShop) throwError(404, "Not Found");
   return res.status(200).json(updatedShop);
 };
 

@@ -5,7 +5,7 @@ const itemSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  catrgory: {
+  category: {
     type: String,
     enum: [
       "Grocery",
@@ -23,12 +23,12 @@ const itemSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    defaut: 0,
+    default: 0,
     required: true,
   },
   discount: {
     type: Number,
-    defaut: 0,
+    default: 0,
   },
   quantity: {
     type: Number,
@@ -43,12 +43,21 @@ const itemSchema = new mongoose.Schema({
     type: Number,
     defaut: 0,
   },
-  imgUr: {
+  imgUrl: {
     type: String,
   },
-  shop: {
+  shopId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Shop",
+  },
+});
+
+itemSchema.set("toJSON", {
+  transform: (document, returnObj) => {
+    returnObj.id = returnObj._id.toString();
+    returnObj.shopId = returnObj.shopId.toString();
+    delete returnObj._id;
+    delete returnObj.__v;
   },
 });
 

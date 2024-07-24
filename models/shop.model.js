@@ -64,6 +64,15 @@ const shopSchema = new mongoose.Schema({
 
 shopSchema.index({ geoLocation: "2dsphere" });
 
+shopSchema.set("toJSON", {
+  transform: (document, returnObj) => {
+    returnObj.id = returnObj._id.toString();
+    returnObj.ownerId = returnObj.ownerId.toString();
+    delete returnObj._id;
+    delete returnObj.__v;
+  },
+});
+
 const Shop = mongoose.model("Shop", shopSchema);
 
 module.exports = {

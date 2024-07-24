@@ -7,6 +7,7 @@ const generateToken = (user) => {
     name: user.name,
     email: user.email,
   };
+  if (user.shopId) userData.shopId = user.shopId;
   const token = jwt.sign(userData, JWT_SECRET_KEY);
   return token;
 };

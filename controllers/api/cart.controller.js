@@ -12,14 +12,10 @@ const throwError = require("../../utility/throwError.util");
 const handleGetCart = async (req, res) => {
   const userId = req.user.id;
   const cart = await getCartDetails(userId);
-  if (!cart) await Cart.create({ user: uesrId });
-  return res.status(200).json(cart);
-};
-
-const handleCheckOutDetails = async (req, res) => {
-  const userId = req.user.id;
-  const cart = await getCartDetails(userId);
-  if (!cart) throwError(404, "Not Found");
+  if (!cart) {
+    const newCart = await Cart.create({ user: userId });
+    return res.status(200).json(newCart);
+  }
   const itemListWithTotal = getListFinalPrices(cart.itemList);
   const itemList = itemListWithTotal.itemList;
   const total = itemListWithTotal.total;
@@ -49,7 +45,6 @@ const handleDeleteCart = async (req, res) => {
 
 module.exports = {
   handleGetCart,
-  handleCheckOutDetails,
   handleUpdateCart,
   handleDeleteCart,
 };

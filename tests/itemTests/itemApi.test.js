@@ -31,7 +31,7 @@ const shopMockData = getMockDataList(shopModel);
 const userMockData = getMockDataList(userModel);
 
 const itemBaseUrl = "/api/item/";
-const shopBaseUrl = "app/shop";
+const shopBaseUrl = "/api/shop/";
 const signupUrl = "/api/user/signup";
 const loginUrl = "/api/user/login";
 
@@ -44,11 +44,18 @@ const setUpTestUser = async (userData) => {
   return { user, userAuthToken };
 };
 
-const setUPShop = async (shopData, authToken) => {
+const setUpShop = async (shopData, authToken) => {
+  shopData.coordinates = _.cloneDeep(shopData.geoLocation.coordinates);
+  delete shopData.geoLocation;
+
   const createShopResponse = await api
     .post(shopBaseUrl)
     .set("authorization", authToken)
+    .send(shopData)
     .expect(201);
+  const authorization = createShopResponse.body.authorization;
+  const newToken = `${authorization.scheme} ${authorization.authToken}`;
+  return newToken;
 };
 
 describe("Item Api Test", async () => {
@@ -65,8 +72,7 @@ describe("Item Api Test", async () => {
     const testUserInfo = await setUpTestUser(userSampleData[0]);
     testUser = testUserInfo.user;
     testUserAuthToken = testUserInfo.userAuthToken;
-    // console.log(testUser);
-    // console.log(testUserAuthToken);
+    testUserAuthToken = await setUpShop(shopMockData[0], testUserAuthToken);
   });
   after(async () => {
     await tearDownTestServer(mongoServer, serverConnection);

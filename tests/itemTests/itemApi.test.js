@@ -69,6 +69,7 @@ describe("Item Api Test", async () => {
   let testUserAuthToken;
   let itemSampleData = [];
   let testShop;
+  let testItemData;
   let testItem;
 
   before(async () => {
@@ -93,13 +94,14 @@ describe("Item Api Test", async () => {
       itemList.push(createdItem);
     }
     testItem = itemList[0];
+    testItemData = itemSampleData[0];
   });
   afterEach(async () => {
     await Item.deleteMany({});
     itemList = [];
   });
 
-  describe("Public Api Tests", async () => {
+  describe("Public Routes Tests", async () => {
     test("get all items", async () => {
       const response = await api.get(itemBaseUrl).expect(200);
       assert.strictEqual(response.body.length, itemList.length);
@@ -108,6 +110,16 @@ describe("Item Api Test", async () => {
       const itemUrl = itemBaseUrl + testItem._id;
       const response = await api.get(itemUrl).expect(200);
       assert.deepStrictEqual(response.body, testItem.toJSON());
+    });
+  });
+
+  describe("Authorized Access Test", () => {
+    test("item creation test", async () => {
+      await api
+        .post(itemBaseUrl)
+        .set("Authorization", testUserAuthToken)
+        .send(testItemData)
+        .expect(201);
     });
   });
 });

@@ -82,6 +82,7 @@ const handleUpdateShop = async (req, res) => {
     runValidators: true,
     new: true,
   });
+  if (!updatedShop) throwError(404, "Not Found");
   return res.status(200).json(updatedShop);
 };
 

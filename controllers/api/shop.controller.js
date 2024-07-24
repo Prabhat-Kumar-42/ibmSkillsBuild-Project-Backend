@@ -58,17 +58,19 @@ const handleUpdateShop = async (req, res) => {
   if (shop.ownerId.toString() !== requestingUser.id)
     throwError(403, "Forbidden");
   const { name, location, category, coordinates } = req.body;
-  const updatedShop = await Shop.findByIdAndUpdate(
-    shopId,
-    {
-      name,
-      location,
-      category,
-      geoLocation: { coordinates },
-    },
-    { runValidators: true, new: true },
-  );
-  return res.status(204).json(updatedShop);
+
+  const updates = {};
+  if (name !== undefined) updates.name = name;
+  if (location !== undefined) updates.location = location;
+  if (category !== undefined) updates.category = category;
+  if (coordinates !== undefined) {
+    updates.geoLocation = { coordinates };
+  }
+  const updatedShop = await Shop.findByIdAndUpdate(shopId, updates, {
+    runValidators: true,
+    new: true,
+  });
+  return res.status(200).json(updatedShop);
 };
 
 const addItemToShopList = async (req, res) => {

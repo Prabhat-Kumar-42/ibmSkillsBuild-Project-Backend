@@ -40,11 +40,15 @@ describe("Shop Api Test", async () => {
   let testUserData;
   let testUser;
   let testUserAuthToken;
+  let otherUserData;
+  let otherUser;
+  let otherUserAuthToken;
   let testShopData;
   let testShop;
   before(async () => {
     userSampleData = _.cloneDeep(userMockData);
     testUserData = userSampleData[0];
+    otherUserData = userSampleData[1];
     const serverInfo = await setUpTestServer();
     mongoServer = serverInfo.mongoServer;
     serverConnection = serverInfo.serverConnection;
@@ -59,6 +63,18 @@ describe("Shop Api Test", async () => {
     const authResponse = loginResponse.body.authorization;
     testUser = loginResponse.body.user;
     testUserAuthToken = `${authResponse.scheme} ${authResponse.authToken}`;
+
+    const otherUserSignUpResponse = await api
+      .post(signupUrl)
+      .send(otherUserData)
+      .expect(201);
+    const otherUserLoginResponse = await api
+      .post(loginUrl)
+      .send(otherUserData)
+      .expect(200);
+    const otherUserAuthResponse = otherUserLoginResponse.body.authorization;
+    otherUser = otherUserLoginResponse.body.user;
+    otherUserAuthToken = `${otherUserAuthResponse.scheme} ${otherUserAuthResponse.authToken}`;
   });
   after(async () => {
     await tearDownTestServer(mongoServer, serverConnection);
@@ -143,6 +159,24 @@ describe("Shop Api Test", async () => {
       test("delete shop test will fail with status code 400", async () => {
         const testShopUrl = baseUrl + testShop.id;
         await api.delete(testShopUrl).expect(400);
+      });
+    });
+    describe("Unauthorized Access Tests", async () => {
+      test("update shop test will fail with response 403", async () => {
+        const testShopUrl = baseUrl + testShop.id;
+        const payload = { ...testShopData, name: "bestShopInTheWorld" };
+        const response = await api
+          .put(testShopUrl)
+          .set("Authorization", otherUserAuthToken)
+          .send(payload)
+          .expect(403);
+      });
+      test("delete shop test will fail with response 403", async () => {
+        const testShopUrl = baseUrl + testShop.id;
+        await api
+          .delete(testShopUrl)
+          .set("Authorization", otherUserAuthToken)
+          .expect(403);
       });
     });
   });

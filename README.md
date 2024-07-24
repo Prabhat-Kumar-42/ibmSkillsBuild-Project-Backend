@@ -13,7 +13,7 @@
 
 ### Shop API
 
--- Check addItem Endpoint after Item Api is defined
+- Check addItem Endpoint after Item Api is defined
 
 ### Item API
 

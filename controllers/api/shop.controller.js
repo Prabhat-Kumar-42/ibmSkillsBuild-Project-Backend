@@ -1,9 +1,10 @@
 const { Shop } = require("../../models/shop.model");
 const { User } = require("../../models/user.model");
+const { generateToken } = require("../../utility/authToken.util");
 const throwError = require("../../utility/throwError.util");
 
-// TODO: add a handler to get the enum values of shop category;
-//
+// TODO: 1. add a handler to get the enum values of shop category;
+// TODO: 2. send auth as headers
 const handleGetAllShops = async (req, res) => {
   const shopsList = await Shop.find({});
   return res.status(200).json(shopsList);
@@ -36,7 +37,11 @@ const handleCreateShop = async (req, res) => {
   });
   user.shopId = shop._id;
   await user.save();
-  return res.status(201).json({ message: "created" });
+  const authToken = generateToken(user);
+  return res.status(201).json({
+    message: "created",
+    authorization: { scheme: "Bearer", authToken },
+  });
 };
 
 const handleDeleteShop = async (req, res) => {

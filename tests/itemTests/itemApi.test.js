@@ -100,7 +100,6 @@ describe("Item Api Test", async () => {
     await Item.deleteMany({});
     itemList = [];
   });
-
   describe("Public Routes Tests", async () => {
     test("get all items", async () => {
       const response = await api.get(itemBaseUrl).expect(200);
@@ -112,7 +111,6 @@ describe("Item Api Test", async () => {
       assert.deepStrictEqual(response.body, testItem.toJSON());
     });
   });
-
   describe("Authorized Access Test", () => {
     test("create item test", async () => {
       await api
@@ -136,6 +134,20 @@ describe("Item Api Test", async () => {
         .set("Authorization", testUserAuthToken)
         .send(payload)
         .expect(200);
+    });
+  });
+  describe("Unauthenticated Access Test", () => {
+    test("create item test will fail with status code 401", async () => {
+      await api.post(itemBaseUrl).send(testItemData).expect(401);
+    });
+    test("delete item test will fail with status code 401", async () => {
+      const itemUrl = itemBaseUrl + testItem._id;
+      await api.delete(itemUrl).expect(401);
+    });
+    test("update item test will fail with status code 401", async () => {
+      const itemUrl = itemBaseUrl + testItem._id;
+      const payload = { name: "goodItemName", price: 432, discount: 100 };
+      await api.put(itemUrl).send(payload).expect(401);
     });
   });
 });

@@ -71,17 +71,28 @@ describe("Item Api Test", async () => {
   let testShop;
   let testItemData;
   let testItem;
+  let otherUser;
+  let otherShop;
+  let otherUserAuthToken;
 
   before(async () => {
     const serverInfo = await setUpTestServer();
     mongoServer = serverInfo.mongoServer;
     serverConnection = serverInfo.serverConnection;
+
     const testUserInfo = await setUpTestUser(userSampleData[0]);
     testUser = testUserInfo.user;
     testUserAuthToken = testUserInfo.userAuthToken;
     const testShopInfo = await setUpShop(shopMockData[0], testUserAuthToken);
     testShop = testShopInfo.shop;
     testUserAuthToken = testShopInfo.authToken;
+
+    const otherUserInfo = await setUpTestUser(userSampleData[1]);
+    otherUser = otherUserInfo.user;
+    otherUserAuthToken = otherUserInfo.userAuthToken;
+    const otherShopInfo = await setUpShop(shopMockData[1], otherUserAuthToken);
+    otherShop = otherShopInfo.shop;
+    otherUserAuthToken = otherShopInfo.authToken;
   });
   after(async () => {
     await tearDownTestServer(mongoServer, serverConnection);
@@ -148,6 +159,24 @@ describe("Item Api Test", async () => {
       const itemUrl = itemBaseUrl + testItem._id;
       const payload = { name: "goodItemName", price: 432, discount: 100 };
       await api.put(itemUrl).send(payload).expect(401);
+    });
+  });
+  describe("Unauthorized Access Test", () => {
+    test("delete item test will fail with result 403", async () => {
+      const itemUrl = itemBaseUrl + testItem._id;
+      await api
+        .delete(itemUrl)
+        .set("Authorization", otherUserAuthToken)
+        .expect(403);
+    });
+    test("update item test will fail with result 403", async () => {
+      const itemUrl = itemBaseUrl + testItem._id;
+      const payload = { name: "goodItemName", price: 432, discount: 100 };
+      await api
+        .put(itemUrl)
+        .set("Authorization", otherUserAuthToken)
+        .send(payload)
+        .expect(403);
     });
   });
 });

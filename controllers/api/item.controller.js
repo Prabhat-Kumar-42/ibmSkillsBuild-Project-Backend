@@ -24,7 +24,7 @@ const handleGetAllItems = async (req, res) => {
 };
 
 const handleGetItem = async (req, res) => {
-  const id = req.params.id;
+  const id = req.params.itemId;
   const item = await Item.findById(id);
   if (!item) throwError(404, "Not Found");
   return res.status(200).json(item);

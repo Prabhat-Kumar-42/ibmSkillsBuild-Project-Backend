@@ -39,7 +39,7 @@ const handleDeleteShop = async (req, res) => {
   if (!shopId) throwError(400, "Bad Request");
   const requestingUser = req.user;
   const shop = await Shop.findById(shopId);
-  if (!shop) throwError(400, "Bad Request");
+  if (!shop) throwError(404, "Not Found");
   if (shop.ownerId.toString() !== requestingUser.id)
     throwError(403, "Forbidden");
   const user = await User.findById(requestingUser.id);
@@ -54,7 +54,7 @@ const handleUpdateShop = async (req, res) => {
   const shopId = req.params.shopId;
   const requestingUser = req.user;
   const shop = await Shop.findById(shopId);
-  if (!shop) throwError(400, "Bad Request");
+  if (!shop) throwError(404, "Not Found");
   if (shop.ownerId.toString() !== requestingUser.id)
     throwError(403, "Forbidden");
   const { name, location, category, coordinates } = req.body;
@@ -78,13 +78,13 @@ const addItemToShopList = async (req, res) => {
   const shopId = req.params.shopId;
   const requestingUser = req.user;
   const shop = await Shop.findById(shopId);
-  if (!shop) throwError(400, "Bad Request");
+  if (!shop) throwError(404, "Not Found");
   if (shop.ownerId.toString() !== requestingUser.id)
     throwError(403, "Forbidden");
   const itemList = req.body.itemList;
   itemList.forEach((item) => shop.itemList.push(item));
   await shop.save();
-  return res.status(201).json({ message: "created" });
+  return res.status(201).json(shop);
 };
 
 module.exports = {

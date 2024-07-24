@@ -69,6 +69,7 @@ describe("Item Api Test", async () => {
   let testUserAuthToken;
   let itemSampleData = [];
   let testShop;
+  let testItem;
 
   before(async () => {
     const serverInfo = await setUpTestServer();
@@ -91,6 +92,7 @@ describe("Item Api Test", async () => {
       const createdItem = await Item.create(item);
       itemList.push(createdItem);
     }
+    testItem = itemList[0];
   });
   afterEach(async () => {
     await Item.deleteMany({});
@@ -101,6 +103,11 @@ describe("Item Api Test", async () => {
     test("get all items", async () => {
       const response = await api.get(itemBaseUrl).expect(200);
       assert.strictEqual(response.body.length, itemList.length);
+    });
+    test("get specific item", async () => {
+      const itemUrl = itemBaseUrl + testItem._id;
+      const response = await api.get(itemUrl).expect(200);
+      assert.deepStrictEqual(response.body, testItem.toJSON());
     });
   });
 });

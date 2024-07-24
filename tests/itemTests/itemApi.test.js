@@ -114,12 +114,28 @@ describe("Item Api Test", async () => {
   });
 
   describe("Authorized Access Test", () => {
-    test("item creation test", async () => {
+    test("create item test", async () => {
       await api
         .post(itemBaseUrl)
         .set("Authorization", testUserAuthToken)
         .send(testItemData)
         .expect(201);
+    });
+    test("delete item test", async () => {
+      const itemUrl = itemBaseUrl + testItem._id;
+      await api
+        .delete(itemUrl)
+        .set("Authorization", testUserAuthToken)
+        .expect(204);
+    });
+    test("update item test", async () => {
+      const itemUrl = itemBaseUrl + testItem._id;
+      const payload = { name: "goodItemName", price: 432, discount: 100 };
+      await api
+        .put(itemUrl)
+        .set("Authorization", testUserAuthToken)
+        .send(payload)
+        .expect(200);
     });
   });
 });

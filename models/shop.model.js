@@ -12,7 +12,7 @@ const shopSchema = new mongoose.Schema({
   imgUrl: {
     type: String,
   },
-  Category: {
+  category: {
     type: String,
     enum: [
       "Grocery",
@@ -28,7 +28,7 @@ const shopSchema = new mongoose.Schema({
     ],
     required: true,
   },
-  owner: {
+  ownerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -63,6 +63,15 @@ const shopSchema = new mongoose.Schema({
 });
 
 shopSchema.index({ geoLocation: "2dsphere" });
+
+shopSchema.set("toJSON", {
+  transform: (document, returnObj) => {
+    returnObj.id = returnObj._id.toString();
+    returnObj.ownerId = returnObj.ownerId.toString();
+    delete returnObj._id;
+    delete returnObj.__v;
+  },
+});
 
 const Shop = mongoose.model("Shop", shopSchema);
 

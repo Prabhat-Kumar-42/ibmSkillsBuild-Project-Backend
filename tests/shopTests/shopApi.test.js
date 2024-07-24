@@ -37,6 +37,7 @@ describe("Shop Api Test", async () => {
   let testUserData;
   let testUser;
   let testUserAuthToken;
+  let testShop;
   before(async () => {
     userSampleData = _.cloneDeep(userMockData);
     testUserData = userSampleData[0];
@@ -65,6 +66,7 @@ describe("Shop Api Test", async () => {
       const createdShop = await Shop.create(shop);
       shopList.push(createdShop);
     }
+    testShop = shopList[0];
   });
   afterEach(async () => {
     await Shop.deleteMany({});
@@ -74,6 +76,12 @@ describe("Shop Api Test", async () => {
     test("fetch all shop data", async () => {
       const response = await api.get(baseUrl).expect(200);
       assert.strictEqual(response.body.length, shopList.length);
+    });
+    test("fetch single shop data", async () => {
+      const testShopUrl = baseUrl + testShop.id;
+      const response = await api.get(testShopUrl).expect(200);
+      const responseShop = response.body;
+      assert.strictEqual(testShop._id.toString(), responseShop.id);
     });
   });
 });

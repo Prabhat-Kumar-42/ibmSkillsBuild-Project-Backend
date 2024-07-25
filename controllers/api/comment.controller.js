@@ -21,8 +21,9 @@ const handlePostComment = async (req, res) => {
     user,
     target,
   });
+  // TODO: increase target replies count: add this task  to queue, will implement in future;
   const savedComment = await newComment.save();
-  res.status(201).json(savedComment);
+  res.status(201).json({ message: "created", comment: savedComment });
 };
 
 const handleUpdateComment = async (req, res) => {
@@ -41,7 +42,7 @@ const handleUpdateComment = async (req, res) => {
   if (dislikes) comment.dislikes = dislikes;
   await comment.save();
   const updatedComment = await comment.populate();
-  return res.status(200).json(updatedComment);
+  return res.status(200).json({ message: "success", comment: updatedComment });
 };
 
 const handleDeleteComment = async (req, res) => {

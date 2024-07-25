@@ -12,6 +12,19 @@ const cartSchema = new mongoose.Schema({
     ref: "User",
     unique: true,
   },
+  total: {
+    type: Number,
+    default: 0,
+  },
+});
+
+cartSchema.pre("save", async function (next) {
+  const cart = this;
+  if (!cart.isModified("itemList")) return next();
+  await cart.populate("itemList");
+  const total = cart.itemList.reduce((acc, item) => acc + item.finalPrice, 0);
+  cart.total = total;
+  next();
 });
 
 cartSchema.set("toJSON", {

@@ -10,7 +10,7 @@ const handleGetTargetComment = async (req, res) => {
     .limit(limit)
     .populate("user")
     .populate("replies");
-  res.status(200).json(comments);
+  res.status(200).json({ message: "success", comment: comments });
 };
 
 const handlePostComment = async (req, res) => {

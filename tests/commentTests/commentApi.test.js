@@ -121,4 +121,26 @@ describe("Comment Api Test", async () => {
         .expect(204);
     });
   });
+  describe("Unauthorized Access Tests", async () => {
+    test("update comment test will fail with status 403", async () => {
+      const commentUrl = commentBaseUrl + testComment.id;
+      const payload = {
+        content: "Hi All !! :D",
+        likes: 77,
+        dislikes: 5, // how can someone dislike that smiling face !!
+      };
+      const response = await api
+        .put(commentUrl)
+        .set("Authorization", targetUserAuthToken)
+        .send(payload)
+        .expect(403);
+    });
+    test("delete comment test will fail with status 403", async () => {
+      const commentUrl = commentBaseUrl + testComment.id;
+      await api
+        .delete(commentUrl)
+        .set("Authorization", targetUserAuthToken)
+        .expect(403);
+    });
+  });
 });

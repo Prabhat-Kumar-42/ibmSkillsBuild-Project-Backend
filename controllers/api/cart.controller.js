@@ -1,4 +1,5 @@
 const { Cart } = require("../../models/cart.model");
+const { User } = require("../../models/user.model");
 const {
   getCartDetails,
   getListFinalPrices,
@@ -11,9 +12,12 @@ const throwError = require("../../utility/throwError.util");
 
 const handleGetCart = async (req, res) => {
   const userId = req.user.id;
-  const cart = await getCartDetails(userId);
+  const cart = await Cart.findOne({ user: userId });
   if (!cart) {
-    const newCart = await Cart.create({ user: userId });
+    const user = await User.findById(userId);
+    if (!user) throwError(404, "user not found");
+    const newCart = await Cart.create({ user: user.id });
+    user.cartId = newCart.id;
     return res.status(200).json(newCart);
   }
   const itemListWithTotal = getListFinalPrices(cart.itemList);

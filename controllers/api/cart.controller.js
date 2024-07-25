@@ -1,9 +1,6 @@
 const { Cart } = require("../../models/cart.model");
 const { User } = require("../../models/user.model");
-const {
-  getCartDetails,
-  getListFinalPrices,
-} = require("../../utility/cartDetails.util");
+const { getCartDetails } = require("../../utility/cartDetails.util");
 const throwError = require("../../utility/throwError.util");
 
 //TODO: cart delete on user delete
@@ -12,19 +9,16 @@ const throwError = require("../../utility/throwError.util");
 
 const handleGetCart = async (req, res) => {
   const userId = req.user.id;
-  const cart = await Cart.findOne({ user: userId });
+  const cart = await getCartDetails(userId);
   if (!cart) {
     const user = await User.findById(userId);
     if (!user) throwError(404, "user not found");
     const newCart = await Cart.create({ user: user.id });
     user.cartId = newCart.id;
-    return res.status(200).json(newCart);
+    await user.save();
+    return res.status(200).json({ message: "created", cart });
   }
-  const itemListWithTotal = getListFinalPrices(cart.itemList);
-  const itemList = itemListWithTotal.itemList;
-  const total = itemListWithTotal.total;
-  const finalCart = { ...cart, itemList, total };
-  return res.status(200).json(finalCart);
+  return res.status(200).json({ message: "success", cart });
 };
 
 const handleUpdateCart = async (req, res) => {
@@ -34,11 +28,7 @@ const handleUpdateCart = async (req, res) => {
   if (!cart) throwError(404, "Not Found");
   cart.itemList = req.body.itemList;
   await cart.save();
-  const itemListWithTotal = getListFinalPrices(cart.itemList);
-  const itemList = itemListWithTotal.itemList;
-  const total = itemListWithTotal.total;
-  const finalCart = { ...cart, itemList, total };
-  return res.status(200).json({ message: "updated", finalCart });
+  return res.status(200).json({ message: "updated", cart });
 };
 
 const handleDeleteCart = async (req, res) => {

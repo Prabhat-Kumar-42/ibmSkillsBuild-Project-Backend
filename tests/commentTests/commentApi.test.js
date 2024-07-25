@@ -78,7 +78,13 @@ describe("Comment Api Test", async () => {
     await Comment.deleteMany({});
     commentList = [];
   });
-
+  describe("Public Route Tests", async () => {
+    test("get target comment", async () => {
+      const targetUrl = commentTargetUrl + targetUser.id;
+      const response = await api.get(targetUrl).expect(200);
+      assert.strictEqual(response.body.comment.length, commentList.length);
+    });
+  });
   describe("Authorized Access Tests", async () => {
     test("create comment test", async () => {
       const payload = {

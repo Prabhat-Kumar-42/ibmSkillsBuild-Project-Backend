@@ -4,6 +4,7 @@
 [Shop Controller](./documentations/api/shopController.md)
 [Item Controller](./documentations/api/itemController.md)
 [Cart Controller](./documentations/api/cartController.md)
+[Comment Controller](./documentations/api/commentController.md)
 
 ## TODOs
 
@@ -26,4 +27,4 @@
 
 ### Comment API
 
-- To be defined.
+- Done.

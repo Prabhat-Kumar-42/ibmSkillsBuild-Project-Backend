@@ -50,6 +50,18 @@ const itemSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Shop",
   },
+  finalPrice: {
+    type: Number,
+    default: 0,
+  },
+});
+
+itemSchema.pre("save", function (next) {
+  const item = this;
+  if (!item.isModified("price") && !item.isModified("discount")) return next();
+  const finalPrice = item.price * (1 - item.discount / 100);
+  item.finalPrice = parseFloat(finalPrice).toFixed(2);
+  next();
 });
 
 itemSchema.set("toJSON", {

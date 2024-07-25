@@ -8,10 +8,12 @@ const commentSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
   target: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
   likes: {
     type: Number,
@@ -23,10 +25,17 @@ const commentSchema = new mongoose.Schema({
   },
   replies: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment",
+      type: Number,
     },
   ],
+});
+
+commentSchema.set("toJSON", {
+  transform: (document, returnObj) => {
+    returnObj.id = returnObj._id.toString();
+    delete returnObj._id;
+    delete returnObj.__v;
+  },
 });
 
 const Comment = mongoose.model("Comment", commentSchema);

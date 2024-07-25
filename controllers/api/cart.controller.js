@@ -5,7 +5,6 @@ const throwError = require("../../utility/throwError.util");
 
 //TODO: cart delete on user delete
 //TODO: shop delete on user delete
-//TODO: popuate cart in response
 
 const handleGetCart = async (req, res) => {
   const userId = req.user.id;

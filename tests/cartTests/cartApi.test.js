@@ -26,6 +26,10 @@ const {
   setUpItemsInShop,
 } = require("../testUtilities/setup.testUtility");
 
+const supertest = require("supertest");
+const { app } = require("../../app");
+const api = supertest(app);
+
 const cartBaseUrl = "/api/cart/";
 const cartModel = "Cart";
 const itemModel = "Item";
@@ -62,6 +66,9 @@ describe("Cart Api Tests", async () => {
     shopOwnerAuthToken = testShopInfo.authToken;
 
     await setUpItemsInShop(itemMockData, shopOwnerAuthToken);
+    const buyerInfo = await setUpTestUser(buyerData);
+    buyer = buyerInfo.user;
+    buyerAuthToken = buyerInfo.userAuthToken;
   });
   after(async () => {
     await tearDownTestServer(mongoServer, serverConnection);
@@ -70,4 +77,7 @@ describe("Cart Api Tests", async () => {
     itemList = await dataInDB(itemModel);
   });
   afterEach(async () => (itemList = []));
+  test("test create cart", async () => {
+    await api.get(cartBaseUrl).set("Authorization", buyerAuthToken).expect(200);
+  });
 });

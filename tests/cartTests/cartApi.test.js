@@ -77,31 +77,39 @@ describe("Cart Api Tests", async () => {
     itemList = await dataInDB(itemModel);
   });
   afterEach(async () => (itemList = []));
-  test("test create cart", async () => {
-    await api.get(cartBaseUrl).set("Authorization", buyerAuthToken).expect(200);
-  });
-  test("test get cart items and cart total is item added in list's total", async () => {
-    const response = await api
-      .get(cartBaseUrl)
-      .set("Authorization", buyerAuthToken)
-      .expect(200);
-    const createdCart = response.body.cart;
-    const cart = await Cart.findById(createdCart.id);
-    const itemIdList = itemList.map((item) => item.id);
-    cart.itemList = itemIdList;
-    await cart.save();
-    const res = await api
-      .get(cartBaseUrl)
-      .set("Authorization", buyerAuthToken)
-      .expect(200);
-    let total = itemList.reduce((acc, item) => acc + item.finalPrice, 0);
-    assert.strictEqual(total, res.body.cart.total);
-  });
-  test("delete cart test", async () => {
-    await api.get(cartBaseUrl).set("Authorization", buyerAuthToken).expect(200);
-    await api
-      .delete(cartBaseUrl)
-      .set("Authorization", buyerAuthToken)
-      .expect(204);
+  describe("Authorized Access Test", async () => {
+    test("test create cart", async () => {
+      await api
+        .get(cartBaseUrl)
+        .set("Authorization", buyerAuthToken)
+        .expect(200);
+    });
+    test("test get cart items and cart total is item added in list's total", async () => {
+      const response = await api
+        .get(cartBaseUrl)
+        .set("Authorization", buyerAuthToken)
+        .expect(200);
+      const createdCart = response.body.cart;
+      const cart = await Cart.findById(createdCart.id);
+      const itemIdList = itemList.map((item) => item.id);
+      cart.itemList = itemIdList;
+      await cart.save();
+      const res = await api
+        .get(cartBaseUrl)
+        .set("Authorization", buyerAuthToken)
+        .expect(200);
+      let total = itemList.reduce((acc, item) => acc + item.finalPrice, 0);
+      assert.strictEqual(total, res.body.cart.total);
+    });
+    test("delete cart test", async () => {
+      await api
+        .get(cartBaseUrl)
+        .set("Authorization", buyerAuthToken)
+        .expect(200);
+      await api
+        .delete(cartBaseUrl)
+        .set("Authorization", buyerAuthToken)
+        .expect(204);
+    });
   });
 });

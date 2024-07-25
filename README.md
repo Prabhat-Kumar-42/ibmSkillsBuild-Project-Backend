@@ -3,6 +3,7 @@
 [User Controller](./documentations/api/userController.md)
 [Shop Controller](./documentations/api/shopController.md)
 [Item Controller](./documentations/api/itemController.md)
+[Cart Controller](./documentations/api/cartController.md)
 
 ## TODOs
 
@@ -21,7 +22,7 @@
 
 ### Cart API
 
-- To be defined.
+- Done.
 
 ### Comment API
 

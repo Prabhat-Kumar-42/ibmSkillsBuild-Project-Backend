@@ -29,6 +29,7 @@ const {
 const commentModel = "Comment";
 const userModel = "User";
 const commentBaseUrl = "/api/comment/";
+const commentTargetUrl = commentBaseUrl + "target/";
 
 const commentMockData = getMockDataList(commentModel);
 const userMockData = getMockDataList(userModel);
@@ -77,6 +78,7 @@ describe("Comment Api Test", async () => {
     await Comment.deleteMany({});
     commentList = [];
   });
+
   describe("Authorized Access Tests", async () => {
     test("create comment test", async () => {
       const payload = {
@@ -104,6 +106,13 @@ describe("Comment Api Test", async () => {
         .send(payload)
         .expect(200);
       assert.strictEqual(payload.content, response.body.comment.content);
+    });
+    test("delete comment test", async () => {
+      const commentUrl = commentBaseUrl + testComment.id;
+      await api
+        .delete(commentUrl)
+        .set("Authorization", testUserAuthToken)
+        .expect(204);
     });
   });
 });

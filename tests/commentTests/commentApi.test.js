@@ -143,4 +143,26 @@ describe("Comment Api Test", async () => {
         .expect(403);
     });
   });
+  describe("Unauthenticated Access Tests", async () => {
+    test("create comment test will fail with status 401", async () => {
+      const payload = {
+        content: commentSampleData[2].content,
+        target: targetUser.id,
+      };
+      await api.post(commentBaseUrl).send(payload).expect(401);
+    });
+    test("update comment test will fail with status 401", async () => {
+      const commentUrl = commentBaseUrl + testComment.id;
+      const payload = {
+        content: "Hi All !! :D",
+        likes: 77,
+        dislikes: 5, // how can someone dislike that smiling face !!
+      };
+      await api.put(commentUrl).send(payload).expect(401);
+    });
+    test("delete comment test will fail with status 401", async () => {
+      const commentUrl = commentBaseUrl + testComment.id;
+      await api.delete(commentUrl).expect(401);
+    });
+  });
 });

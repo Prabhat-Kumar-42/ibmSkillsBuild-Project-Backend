@@ -14,8 +14,6 @@ cartRouter
   .put(checkAuth, handleUpdateCart)
   .delete(checkAuth, handleDeleteCart);
 
-cartRouter.route("/cartDetails").get();
-
 module.exports = {
   cartRouter,
 };

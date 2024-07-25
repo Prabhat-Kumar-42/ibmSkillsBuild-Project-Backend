@@ -97,4 +97,11 @@ describe("Cart Api Tests", async () => {
     let total = itemList.reduce((acc, item) => acc + item.finalPrice, 0);
     assert.strictEqual(total, res.body.cart.total);
   });
+  test("delete cart test", async () => {
+    await api.get(cartBaseUrl).set("Authorization", buyerAuthToken).expect(200);
+    await api
+      .delete(cartBaseUrl)
+      .set("Authorization", buyerAuthToken)
+      .expect(204);
+  });
 });

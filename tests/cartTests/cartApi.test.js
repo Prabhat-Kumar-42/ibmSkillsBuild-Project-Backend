@@ -112,4 +112,16 @@ describe("Cart Api Tests", async () => {
         .expect(204);
     });
   });
+  describe("Unauthenticated Access Test", async () => {
+    test("test create cart will fail with status 401", async () => {
+      await api.get(cartBaseUrl).expect(401);
+    });
+    test("delete cart test will fail with status 401", async () => {
+      await api
+        .get(cartBaseUrl)
+        .set("Authorization", buyerAuthToken)
+        .expect(200);
+      await api.delete(cartBaseUrl).expect(401);
+    });
+  });
 });

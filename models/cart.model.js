@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const cartSchema = {
+const cartSchema = new mongoose.Schema({
   itemList: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -12,7 +12,7 @@ const cartSchema = {
     ref: "User",
     unique: true,
   },
-};
+});
 
 cartSchema.set("toJSON", {
   transform: (document, returnObj) => {

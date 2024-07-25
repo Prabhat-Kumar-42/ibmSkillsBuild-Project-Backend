@@ -91,5 +91,19 @@ describe("Comment Api Test", async () => {
       const dataDb = await dataInDB(commentModel);
       assert.strictEqual(dataDb.length, commentList.length + 1);
     });
+    test("update comment test", async () => {
+      const commentUrl = commentBaseUrl + testComment.id;
+      const payload = {
+        content: "Hi All !! :D",
+        likes: 77,
+        dislikes: 5, // how can someone dislike that smiling face !!
+      };
+      const response = await api
+        .put(commentUrl)
+        .set("Authorization", testUserAuthToken)
+        .send(payload)
+        .expect(200);
+      assert.strictEqual(payload.content, response.body.comment.content);
+    });
   });
 });

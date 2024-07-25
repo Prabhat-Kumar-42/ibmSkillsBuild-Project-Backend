@@ -14,6 +14,8 @@ const app = express();
 //Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const {
   unknownEndpoint,
   mongoError,

@@ -69,7 +69,7 @@ const handleUpdatePassword = async (req, res) => {
 const handleUpdateEmail = async (req, res) => {
   const { email } = req.user;
   const { updatedEmail, password } = req.body;
-  if (!updatedEmail) throwError("email is required field");
+  if (!updatedEmail) throwError(400, "email is required field");
   const user = await User.matchPassword(email, password);
   if (!user) throwError(400, "invalid password");
   user.email = updatedEmail;

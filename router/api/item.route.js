@@ -17,12 +17,12 @@ itemRouter
   .get(handleGetAllItems)
   .post(checkAuth, checkShop, handleCreateItem);
 
+itemRouter.route("/categories").get(handleGetCategory);
+
 itemRouter
   .route("/:itemId")
   .get(handleGetItem)
   .delete(checkAuth, checkShop, handleDeleteItem)
   .put(checkAuth, checkShop, handleUpdateItem);
-
-itemRouter.route("/categories").get(handleGetCategory);
 
 module.exports = { itemRouter };

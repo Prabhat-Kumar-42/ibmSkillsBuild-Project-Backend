@@ -15,7 +15,9 @@ const handleGetAllShops = async (req, res) => {
 
 const handleGetShop = async (req, res) => {
   const shopId = req.params.shopId;
-  const shop = await Shop.findById(shopId);
+  const shop = await Shop.findById(shopId)
+    .populate("itemList")
+    .populate("ownerId");
   if (!shop) throwError(404, "Not Found");
   return res.status(200).json(shop);
 };

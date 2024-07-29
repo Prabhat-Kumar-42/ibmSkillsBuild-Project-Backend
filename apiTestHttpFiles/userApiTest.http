@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:3001/api
+@userEndpoint = {{baseUrl}}/user
+@loginEndpoint = {{userEndpoint}}/login
+@signupEndpoint = {{userEndpoint}}/signup
+@json = application/json
+
+###
+
+POST {{signupEndpoint}} 
+Content-Type: {{json}} 
+Accept: {{json}} 
+
+{
+  "name": "testUser-1",
+  "email": "tu1@testmail.com",
+  "password": "HiHelloXD"
+}
+
+
+###
+
+POST {{loginEndpoint}}
+Content-Type:{{json}} 
+accept: {{json}}
+
+{
+  "email": "tu1@testmail.com",
+  "password": "HiHelloXD"
+}
+
+

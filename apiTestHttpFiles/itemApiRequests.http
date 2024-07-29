@@ -1,0 +1,56 @@
+@baseUrl = http://localhost:3001/api/item
+@categoriesUrl = {{baseUrl}}/categories
+@authScheme = Bearer 
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YTdhZjQzMWIzN2U2NWZiNzhhMjUwNyIsIm5hbWUiOiJ0ZXN0VXNlci0xIiwiZW1haWwiOiJ0dTFAdGVzdG1haWwuY29tIiwic2hvcElkIjoiNjZhN2I2NWE2ZWU0Y2I5OTdlZjJkY2YxIiwiaWF0IjoxNzIyMjY4NTc5fQ.jIcR6aFGbB26uCQKULTP63iTxrBn7TbbSPxIbAjOZ28
+@json = application/json
+
+@loginUrl = http://localhost:3001/api/user/login
+
+@testShopId = 66a7b65a6ee4cb997ef2dcf1
+
+###
+POST {{loginUrl}}
+Content-Type:{{json}} 
+accept: {{json}}
+
+{
+  "email": "tu1@testmail.com",
+  "password": "HiHelloXD"
+}
+
+###
+GET {{categoriesUrl}}
+Accept: {{json}}
+
+###
+GET {{baseUrl}}
+Accept: {{json}}
+
+###
+POST {{baseUrl}} 
+Authorization: {{authScheme}} {{authToken}}
+Content-Type: {{json}} 
+Accept: {{json}} 
+
+{
+    "name":"testItem-1",
+    "category":"Clothing",
+    "price":100,
+    "discount":10,
+    "quantity":20
+}
+
+###
+POST {{baseUrl}} 
+Authorization: {{authScheme}} {{authToken}}
+Content-Type: {{json}} 
+Accept: {{json}} 
+
+{
+    "name":"testItem-2",
+    "category":"Clothing",
+    "price":100,
+    "discount":20,
+    "quantity":40
+}
+

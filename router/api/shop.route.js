@@ -9,9 +9,11 @@ const {
   handleUpdateShop,
   handleDeleteShop,
   addItemToShopList,
+  handleGetShopCategories,
 } = require("../../controllers/api/shop.controller");
 
 shopRouter.route("/").get(handleGetAllShops).post(checkAuth, handleCreateShop);
+shopRouter.route("/getCategories").get(handleGetShopCategories);
 shopRouter
   .route("/:shopId")
   .get(handleGetShop)

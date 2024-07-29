@@ -8,6 +8,22 @@ const throwError = require("../../utility/throwError.util");
 // TODO: 3. added shop object in response body of createObject handler,
 //          add this in documentation
 
+const handleGetShopCategories = (req, res) => {
+  const categories = [
+    "Grocery",
+    "Clothing",
+    "Electronics",
+    "Books",
+    "Furniture",
+    "Toys",
+    "Sports",
+    "Jewelry",
+    "Chemist",
+    "Other",
+  ];
+  return res.status(200).json({ categories });
+};
+
 const handleGetAllShops = async (req, res) => {
   const shopsList = await Shop.find({});
   return res.status(200).json(shopsList);
@@ -25,6 +41,8 @@ const handleGetShop = async (req, res) => {
 const handleCreateShop = async (req, res) => {
   if (!req.body) throwError(400, "all fields are requierd");
   const ownerId = req.user.id;
+  //TODO: remove this future, user can have many shops
+  if (req.user.shopId) throwError(400, "user alreay have a shop");
   const user = await User.findById(ownerId);
   if (!user) throwError(404, "Not Found");
   const { name, location, category, coordinates } = req.body;
@@ -105,6 +123,7 @@ const addItemToShopList = async (req, res) => {
 };
 
 module.exports = {
+  handleGetShopCategories,
   handleGetAllShops,
   handleGetShop,
   handleCreateShop,

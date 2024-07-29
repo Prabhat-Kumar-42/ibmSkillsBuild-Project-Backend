@@ -25,7 +25,9 @@ const handleGetShopCategories = (req, res) => {
 };
 
 const handleGetAllShops = async (req, res) => {
-  const shopsList = await Shop.find({});
+  const shopsList = await Shop.find({})
+    .populate("itemList")
+    .populate("ownerId");
   return res.status(200).json(shopsList);
 };
 

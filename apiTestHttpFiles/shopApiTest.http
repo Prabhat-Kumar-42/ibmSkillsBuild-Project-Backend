@@ -1,0 +1,51 @@
+@baseUrl = http://localhost:3001/api/shop
+@categoriesUrl = {{baseUrl}}/getCategories
+@authScheme = Bearer 
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YTdhZjQzMWIzN2U2NWZiNzhhMjUwNyIsIm5hbWUiOiJ0ZXN0VXNlci0xIiwiZW1haWwiOiJ0dTFAdGVzdG1haWwuY29tIiwiaWF0IjoxNzIyMjY1NDI1fQ.OCAzNe0HiIxLk2lKF7lfAwnoYAku19cjdOBlFVbGM_c
+@json = application/json
+
+@loginUrl = http://localhost:3001/api/user/login
+
+@testShopId = 66a7b65a6ee4cb997ef2dcf1
+###
+
+POST {{loginUrl}}
+Content-Type:{{json}} 
+accept: {{json}}
+
+{
+  "email": "tu1@testmail.com",
+  "password": "HiHelloXD"
+}
+
+###
+
+GET {{categoriesUrl}}
+Accept: {{json}}
+
+###
+
+GET {{baseUrl}}
+Accept: {{json}}
+
+###
+
+POST {{baseUrl}} 
+Authorization: {{authScheme}} {{authToken}}
+Content-Type: {{json}} 
+Accept: {{json}} 
+
+{
+  "name": "testShop-1",
+  "location": "testShop-1 location",
+  "category": "Clothing",
+  "coordinates": [0, 0]
+}
+
+###
+
+GET {{baseUrl}}/{{testShopId}}
+Accept: {{json}}
+
+
+

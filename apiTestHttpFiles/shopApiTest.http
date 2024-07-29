@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:3001/api/shop
-@categoriesUrl = {{baseUrl}}/getCategories
+@categoriesUrl = {{baseUrl}}/categories
 @authScheme = Bearer 
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YTdhZjQzMWIzN2U2NWZiNzhhMjUwNyIsIm5hbWUiOiJ0ZXN0VXNlci0xIiwiZW1haWwiOiJ0dTFAdGVzdG1haWwuY29tIiwiaWF0IjoxNzIyMjY1NDI1fQ.OCAzNe0HiIxLk2lKF7lfAwnoYAku19cjdOBlFVbGM_c
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YTdhZjQzMWIzN2U2NWZiNzhhMjUwNyIsIm5hbWUiOiJ0ZXN0VXNlci0xIiwiZW1haWwiOiJ0dTFAdGVzdG1haWwuY29tIiwic2hvcElkIjoiNjZhN2I2NWE2ZWU0Y2I5OTdlZjJkY2YxIiwiaWF0IjoxNzIyMjY4NzIwfQ.4IB3uVA8FBt3jfjQA66Q0U8FNQfCzu-XWyGFkbRKa-A
 @json = application/json
 
 @loginUrl = http://localhost:3001/api/user/login
